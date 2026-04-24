@@ -1,0 +1,136 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:#F0F4FF;--bg2:#E6ECF8;--card:#FFFFFF;--card2:#F5F8FF;
+  --nav-bg:#FFFFFF;--nav-border:#D0DAEE;
+  --text:#1A2340;--text2:#5A6A9A;
+  --accent:#4A9BB5;--accent2:#2D7A96;
+  --green:#2D8A4E;--green2:#1A6634;
+  --red:#C0392B;--red2:#922B21;
+  --yellow:#8A6200;--shadow:rgba(74,155,181,0.12);
+  --border:#D0DAEE;
+}
+[data-theme="dark"] {
+  --bg:#0A0E1A;--bg2:#0F1525;--card:#161D35;--card2:#1C2540;
+  --nav-bg:#0F1525;--nav-border:#252D50;
+  --text:#D8E4FF;--text2:#6B7FBF;
+  --accent:#7EC8E3;--accent2:#4A9BB5;
+  --green:#69D08A;--green2:#2D8A4E;
+  --red:#FF6B8A;--red2:#C0392B;
+  --yellow:#FFD54F;--shadow:rgba(126,200,227,0.14);
+  --border:#252D50;
+}
+
+html, body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; transition:background .3s,color .3s; }
+
+.hero { text-align:center; padding:30px 16px 8px; }
+.hero h1 { font-family:'Pacifico',cursive; font-size:1.9rem; color:var(--accent); }
+.hero p  { color:var(--text2); font-weight:600; margin-top:4px; font-size:0.92rem; }
+
+.main-wrap { max-width:840px; margin:0 auto; padding:20px 16px 80px; display:flex; flex-direction:column; gap:22px; }
+
+/* Shift summary banner */
+.shift-summary {
+  background:var(--card2); border:2px solid var(--green2); border-radius:16px;
+  padding:16px 20px; display:none; align-items:center; gap:14px; flex-wrap:wrap;
+}
+.shift-summary.show { display:flex; }
+.shift-summary-icon { font-size:2rem; }
+.shift-info h3 { font-family:'Pacifico',cursive; font-size:1rem; color:var(--green); margin-bottom:3px; }
+.shift-info p  { font-size:0.85rem; font-weight:700; color:var(--text2); }
+.shift-info strong { color:var(--text); }
+
+/* Active staff panel */
+.active-card { background:var(--card); border:2px solid var(--border); border-radius:18px; overflow:hidden; }
+.active-header { padding:13px 20px; border-bottom:2px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.active-header h2 { font-family:'Pacifico',cursive; font-size:0.98rem; color:var(--accent); }
+.online-badge {
+  background:rgba(45,138,78,0.12); color:var(--green);
+  border:1.5px solid var(--green); border-radius:50px;
+  padding:3px 12px; font-size:0.72rem; font-weight:900;
+}
+[data-theme="dark"] .online-badge { background:rgba(105,208,138,0.12); }
+.active-grid { display:flex; flex-wrap:wrap; gap:10px; padding:14px; }
+.active-pill {
+  display:flex; align-items:center; gap:9px;
+  background:var(--card2); border:2px solid var(--border);
+  border-radius:13px; padding:9px 13px; min-width:150px;
+}
+.active-dot {
+  width:9px; height:9px; border-radius:50%;
+  background:var(--green); flex-shrink:0;
+}
+.active-name  { font-weight:800; font-size:0.84rem; color:var(--text); }
+.active-role  { font-size:0.71rem; color:var(--text2); font-weight:700; }
+.active-time  { font-family:'Share Tech Mono',monospace; font-size:0.73rem; color:var(--accent); }
+.empty-active { text-align:center; padding:22px; color:var(--text2); font-weight:700; font-size:0.88rem; }
+
+/* Clock card */
+.clock-card {
+  background:var(--card); border:2px solid var(--border); border-radius:22px;
+  padding:26px 26px 22px; display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center;
+}
+.emp-name-big { font-family:'Pacifico',cursive; font-size:1.45rem; color:var(--accent); }
+.role-tag {
+  background:var(--card2); border:1.5px solid var(--border); border-radius:50px;
+  padding:3px 15px; font-size:0.78rem; font-weight:900; color:var(--text2);
+  text-transform:uppercase; letter-spacing:0.05em;
+}
+.clock-display {
+  font-family:'Share Tech Mono',monospace; font-size:3.2rem;
+  color:var(--text); letter-spacing:0.06em; line-height:1;
+  padding:14px 26px; background:var(--bg);
+  border:2px solid var(--border); border-radius:16px; min-width:270px;
+  transition:color .3s,border-color .3s;
+}
+.clock-display.running { color:var(--green); border-color:var(--green2); }
+.clock-status { font-size:0.86rem; font-weight:700; color:var(--text2); }
+.clock-status.on { color:var(--green); font-weight:900; }
+.clock-buttons { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
+.clock-in-btn {
+  background:var(--green2); border:none; border-radius:50px; padding:12px 34px;
+  font-family:'Nunito',sans-serif; font-size:0.95rem; font-weight:900; color:#fff; cursor:pointer;
+  box-shadow:0 4px 0 #1a5c34;
+}
+.clock-in-btn:active { transform:translateY(2px); box-shadow:0 1px 0 #1a5c34; }
+.clock-out-btn {
+  background:var(--red2); border:none; border-radius:50px; padding:12px 34px;
+  font-family:'Nunito',sans-serif; font-size:0.95rem; font-weight:900; color:#fff; cursor:pointer;
+  box-shadow:0 4px 0 #7B241C;
+}
+.clock-out-btn:active { transform:translateY(2px); box-shadow:0 1px 0 #7B241C; }
+.clock-out-btn:disabled, .clock-in-btn:disabled { opacity:.4; cursor:not-allowed; box-shadow:none; }
+
+/* Sessions table */
+.sessions-card { background:var(--card); border:2px solid var(--border); border-radius:18px; overflow:hidden; }
+.sessions-header {
+  padding:13px 20px; border-bottom:2px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.sessions-header h2 { font-family:'Pacifico',cursive; font-size:0.98rem; color:var(--accent); }
+.total-hrs-badge {
+  background:rgba(138,98,0,0.1); color:var(--yellow);
+  border:1.5px solid var(--yellow); border-radius:50px;
+  padding:3px 12px; font-size:0.76rem; font-weight:900;
+}
+[data-theme="dark"] .total-hrs-badge { background:rgba(255,213,79,0.1); color:#FFD54F; border-color:#FFD54F; }
+.sessions-table { width:100%; border-collapse:collapse; }
+.sessions-table th {
+  padding:9px 14px; text-align:left; font-size:0.69rem; font-weight:900;
+  color:var(--text2); text-transform:uppercase; letter-spacing:0.07em;
+  border-bottom:1.5px solid var(--border); background:var(--card2);
+}
+.sessions-table td { padding:11px 14px; font-size:0.84rem; font-weight:700; color:var(--text); border-bottom:1px solid var(--border); }
+.sessions-table tr:last-child td { border-bottom:none; }
+.hrs-badge {
+  background:rgba(138,98,0,0.1); color:var(--yellow);
+  border:1.5px solid var(--yellow); border-radius:50px;
+  padding:2px 9px; font-size:0.71rem; font-weight:900;
+}
+[data-theme="dark"] .hrs-badge { background:rgba(255,213,79,0.1); color:#FFD54F; border-color:#FFD54F; }
+.empty-sessions { text-align:center; padding:32px; color:var(--text2); font-weight:700; }
+
+@media(max-width:500px){
+  .clock-display { font-size:2.2rem; min-width:200px; padding:12px 16px; }
+}
+

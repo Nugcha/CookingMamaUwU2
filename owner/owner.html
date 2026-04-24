@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Owner Dashboard – Cooking Mama</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Pacifico&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#FFF8E8;--bg2:#FFF0CC;--card:#FFFFFF;--card2:#FFF8E8;
+      --border:#E0C870;--text:#3A2800;--text2:#8A6E20;
+      --gold:#C8940A;--gold2:#A07200;--green:#2D7A4E;--green2:#1A5A34;
+      --red:#C0392B;--red2:#922B21;--blue:#1A6AA0;--purple:#7A3AA0;
+      --shadow:rgba(200,148,10,0.13);--nav-bg:#FFFFFF;--nav-border:#E0C870;
+    }
+    [data-theme="dark"]{
+      --bg:#100A00;--bg2:#1A1000;--card:#231500;--card2:#2E1C00;
+      --border:#4A3000;--text:#FFF3D6;--text2:#B8922A;
+      --gold:#FFD54F;--gold2:#FF8F00;--green:#69D08A;--green2:#2D8A4E;
+      --red:#FF6B6B;--red2:#C0392B;--blue:#7EC8E3;--purple:#C97FC7;
+      --shadow:rgba(255,213,79,0.15);--nav-bg:#1A1000;--nav-border:#4A3000;
+    }
+    html,body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
+    nav{position:sticky;top:0;z-index:200;background:var(--nav-bg);border-bottom:2px solid var(--nav-border);
+      display:flex;align-items:center;justify-content:space-between;padding:10px 24px;
+      box-shadow:0 2px 20px var(--shadow);gap:10px;transition:background .3s}
+    .nav-logo{height:44px;object-fit:contain;cursor:pointer;flex-shrink:0}
+    .nav-title{font-family:'Pacifico',cursive;font-size:1.1rem;color:var(--gold);white-space:nowrap}
+    .nav-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .user-pill{display:flex;align-items:center;gap:8px;background:var(--card);border:1.5px solid var(--border);
+      border-radius:50px;padding:5px 14px 5px 5px;font-weight:700;font-size:0.82rem;color:var(--text2)}
+    .user-pill img{width:30px;height:30px;border-radius:50%;border:2px solid var(--gold);object-fit:cover}
+    .sign-out-btn{background:transparent;border:2px solid var(--border);border-radius:50px;padding:6px 14px;
+      font-family:'Nunito',sans-serif;font-size:0.78rem;font-weight:700;color:var(--text2);cursor:pointer;transition:all .2s}
+    .sign-out-btn:hover{border-color:var(--red);color:var(--red)}
+    .theme-btn{background:var(--card2);border:2px solid var(--border);border-radius:50px;
+      padding:6px 12px;font-size:0.85rem;cursor:pointer;color:var(--text2);font-weight:800}
+    .nav-dropdown{position:relative}
+    .nav-dd-btn{background:var(--gold2);color:#fff;border:none;border-radius:50px;
+      padding:8px 16px;font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:800;cursor:pointer;white-space:nowrap}
+    [data-theme="light"] .nav-dd-btn{background:var(--gold);color:#fff}
+    .nav-dd-btn:hover{opacity:.88}
+    .nav-dd-menu{position:absolute;top:calc(100% + 8px);right:0;background:var(--card);
+      border:2px solid var(--border);border-radius:16px;min-width:200px;
+      box-shadow:0 8px 32px var(--shadow);z-index:300;overflow:hidden;display:none}
+    .nav-dd-menu.open{display:block;animation:ddFade .15s ease}
+    @keyframes ddFade{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+    .nav-dd-item{display:block;width:100%;padding:11px 18px;text-align:left;background:none;border:none;
+      font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:700;color:var(--text);
+      cursor:pointer;transition:background .15s;border-bottom:1px solid var(--border)}
+    .nav-dd-item:last-child{border-bottom:none}
+    .nav-dd-item:hover{background:var(--card2)}
+    .hero{text-align:center;padding:32px 16px 8px}
+    .hero h1{font-family:'Pacifico',cursive;font-size:2rem;color:var(--gold);text-shadow:0 0 30px var(--shadow)}
+    .hero p{color:var(--text2);font-weight:600;margin-top:4px}
+    .main-wrap{max-width:1100px;margin:0 auto;padding:20px 16px 0;display:flex;flex-direction:column;gap:28px}
+    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+    .kpi-card{background:var(--card);border:2px solid var(--border);border-radius:20px;
+      padding:22px 24px;display:flex;flex-direction:column;gap:6px;box-shadow:0 4px 24px var(--shadow);transition:transform .18s}
+    .kpi-card:hover{transform:translateY(-3px)}
+    .kpi-icon{font-size:1.8rem}
+    .kpi-label{font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--text2)}
+    .kpi-val{font-family:'Share Tech Mono',monospace;font-size:2rem;font-weight:900;line-height:1}
+    .kpi-val.income{color:var(--green)}
+    .kpi-val.expense{color:var(--red)}
+    .kpi-val.profit.positive{color:var(--gold)}
+    .kpi-val.profit.negative{color:var(--red)}
+    .kpi-sub{font-size:.78rem;font-weight:700;color:var(--text2);margin-top:2px}
+    .section-card{background:var(--card);border:2px solid var(--border);border-radius:20px;overflow:hidden}
+    .section-header{padding:16px 22px;border-bottom:2px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+    .section-header h2{font-family:'Pacifico',cursive;font-size:1rem;color:var(--gold)}
+    .section-badge{background:var(--card2);border-radius:50px;padding:3px 12px;font-size:.75rem;font-weight:900;color:var(--text2)}
+    .orders-list{display:flex;flex-direction:column}
+    .order-row{display:grid;grid-template-columns:1fr auto auto auto;gap:12px;align-items:center;
+      padding:12px 22px;border-bottom:1px solid var(--border)}
+    .order-row:last-child{border-bottom:none}
+    .order-row:hover{background:rgba(255,213,79,.03)}
+    .order-cust{font-weight:800;font-size:.88rem}
+    .order-items-count{font-size:.78rem;color:var(--text2);font-weight:700}
+    .order-time-sm{font-size:.75rem;color:var(--text2);font-weight:700}
+    .order-amt{font-family:'Share Tech Mono',monospace;font-size:.9rem;color:var(--green);font-weight:900}
+    .status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .dot-pending{background:#FFD54F}.dot-cooking{background:#FFB347}.dot-ready{background:#69D08A}.dot-completed{background:#7EC8E3}
+    .empty-list{text-align:center;padding:36px;color:var(--text2);font-weight:700}
+    .wages-table{width:100%;border-collapse:collapse}
+    .wages-table th{padding:10px 16px;text-align:left;font-size:.7rem;font-weight:900;color:var(--text2);
+      text-transform:uppercase;letter-spacing:.07em;border-bottom:1.5px solid var(--border);background:var(--card2)}
+    .wages-table td{padding:11px 16px;font-size:.85rem;font-weight:700;color:var(--text);border-bottom:1px solid var(--border)}
+    .wages-table tr:last-child td{border-bottom:none}
+    .wages-table tr:hover td{background:rgba(255,213,79,.03)}
+    .wage-hrs{color:var(--blue);font-family:'Share Tech Mono',monospace}
+    .wage-cost{color:var(--red);font-family:'Share Tech Mono',monospace;font-weight:900}
+    .wage-settings{padding:14px 22px;border-top:2px solid var(--border);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+    .wage-label{font-size:.78rem;font-weight:800;color:var(--text2)}
+    .wage-input{background:var(--card2);border:2px solid var(--border);border-radius:10px;
+      padding:7px 12px;font-family:'Share Tech Mono',monospace;font-size:.9rem;color:var(--text);width:90px;outline:none}
+    .wage-input:focus{border-color:var(--gold)}
+    .wage-save-btn{background:var(--gold2);border:none;border-radius:10px;padding:8px 18px;
+      font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:900;color:#fff;cursor:pointer;
+      box-shadow:0 3px 0 #7A5000;transition:transform .1s}
+    .wage-save-btn:hover{transform:translateY(-1px)}
+    .inv-summary{display:flex;flex-direction:column}
+    .inv-row{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;
+      padding:11px 22px;border-bottom:1px solid var(--border)}
+    .inv-row:last-child{border-bottom:none}
+    .inv-name{font-weight:800;font-size:.88rem}
+    .inv-qty{font-size:.78rem;color:var(--text2);font-weight:700}
+    .inv-cost{font-family:'Share Tech Mono',monospace;font-size:.88rem;color:var(--red);font-weight:900}
+
+    /* recipe accordion */
+    .recipe-section{max-width:1100px;margin:28px auto 0;padding:0 16px 80px}
+    .recipe-accordion{background:var(--card);border:2px solid var(--border);border-radius:20px;overflow:hidden}
+    .recipe-acc-header{padding:16px 22px;border-bottom:2px solid var(--border);display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+    .recipe-acc-header h2{font-family:'Pacifico',cursive;font-size:1rem;color:var(--gold)}
+    .recipe-acc-arrow{font-size:1.1rem;color:var(--text2);transition:transform .25s}
+    .recipe-acc-arrow.open{transform:rotate(180deg)}
+    .recipe-acc-body{display:flex;flex-direction:column;gap:10px;padding:16px 22px 20px}
+    .recipe-acc-body.hidden{display:none}
+    .recipe-item{background:var(--card2);border:1.5px solid var(--border);border-radius:14px;overflow:hidden}
+    .recipe-item-header{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+    .recipe-item-name{font-weight:800;font-size:.92rem;color:var(--text)}
+    .recipe-item-arrow{font-size:.9rem;color:var(--text2);transition:transform .2s}
+    .recipe-item-arrow.open{transform:rotate(180deg)}
+    .recipe-item-body{display:none;padding:12px 16px 14px;border-top:1.5px solid var(--border)}
+    .recipe-item-body.open{display:block}
+    .recipe-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px}
+    .recipe-label{font-size:.72rem;font-weight:900;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px}
+    .recipe-val{font-size:.85rem;font-weight:700;color:var(--text)}
+
+    #authLoader{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center}
+    .spinner{width:46px;height:46px;border:5px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(40px);
+      background:var(--card);color:var(--gold);padding:12px 26px;border-radius:50px;border:2px solid var(--gold);
+      font-size:.9rem;font-weight:800;z-index:500;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;white-space:nowrap}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @media(max-width:600px){.order-row{grid-template-columns:1fr auto auto}.order-time-sm{display:none}nav{padding:8px 12px}.nav-title{display:none}}
+  </style>
+</head>
+<body>
+<div id="authLoader"><div class="spinner"></div></div>
+
+<nav id="mainNav" style="display:none">
+  <img class="nav-logo" src="/assets/logonav.jpg" alt="Cooking Mama"/>
+  <span class="nav-title">Owner HQ</span>
+  <div class="nav-right">
+    <button class="theme-btn" id="themeBtn"></button>
+    <div class="nav-dropdown">
+      <button class="nav-dd-btn" id="navDdBtn"> Navigate ▾</button>
+      <div class="nav-dd-menu" id="navDdMenu">
+        <button class="nav-dd-item" onclick="window.location.href='/customer/customer.html'"> Customer Menu</button>
+        <button class="nav-dd-item" onclick="window.location.href='/chef/chef.html'"> Chef Dashboard</button>
+        <button class="nav-dd-item" onclick="window.location.href='/manager/manager.html'"> Manager</button>
+        <button class="nav-dd-item" onclick="window.location.href='/employee/employee.html'">Time Tracker</button>
+      </div>
+    </div>
+    <div class="user-pill">
+      <img id="navAvatar" src="" alt="avatar"/>
+      <span id="navName">Owner</span>
+    </div>
+    <button class="sign-out-btn" id="btnSignOut">Sign Out</button>
+  </div>
+</nav>
+
+<div id="pageContent" style="display:none">
+  <div class="hero">
+    <h1> Owner HQ</h1>
+    <p>Full financial overview — revenue, wages, inventory costs & net profit</p>
+  </div>
+  <div class="main-wrap">
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-icon"></div><div class="kpi-label">Total Revenue</div><div class="kpi-val income" id="kpiRevenue">$0.00</div><div class="kpi-sub" id="kpiOrderCount">0 orders</div></div>
+      <div class="kpi-card"><div class="kpi-icon"></div><div class="kpi-label">Employee Wages</div><div class="kpi-val expense" id="kpiWages">$0.00</div><div class="kpi-sub" id="kpiHoursTotal">0 hrs logged</div></div>
+      <div class="kpi-card"><div class="kpi-icon"></div><div class="kpi-label">Inventory Cost</div><div class="kpi-val expense" id="kpiInvCost">$0.00</div><div class="kpi-sub" id="kpiInvItems">0 items</div></div>
+      <div class="kpi-card"><div class="kpi-icon"></div><div class="kpi-label">Net Profit</div><div class="kpi-val profit" id="kpiProfit">$0.00</div><div class="kpi-sub" id="kpiMargin">Margin: 0%</div></div>
+    </div>
+    <div class="section-card">
+      <div class="section-header"><h2> Order Revenue</h2><span class="section-badge" id="ordBadge">0 orders</span></div>
+      <div class="orders-list" id="ordersList"><div class="empty-list">No orders yet </div></div>
+    </div>
+    <div class="section-card">
+      <div class="section-header"><h2>👤 Employee Wages</h2><span class="section-badge" id="empBadge">0 employees</span></div>
+      <table class="wages-table">
+        <thead><tr><th>Name</th><th>Role</th><th>Total Hrs</th><th>Rate/hr</th><th>Owed</th></tr></thead>
+        <tbody id="wagesBody"><tr><td colspan="5" class="empty-list">No time sessions logged yet</td></tr></tbody>
+      </table>
+      <div class="wage-settings">
+        <span class="wage-label">Default Hourly Rate:</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="color:var(--gold);font-weight:900">$</span>
+          <input class="wage-input" id="wageRateInput" type="number" min="0" step="0.5" value="15.00"/>
+          <span class="wage-label">/ hr</span>
+        </div>
+        <button class="wage-save-btn" id="wageRateSave">Apply Rate</button>
+      </div>
+    </div>
+    <div class="section-card">
+      <div class="section-header"><h2> Inventory Expenses</h2><span class="section-badge" id="invBadge">0 items</span></div>
+      <div class="inv-summary" id="invList"><div class="empty-list">No inventory items</div></div>
+    </div>
+  </div>
+
+  <!-- Recipe accordion -->
+  <div class="recipe-section">
+    <div class="recipe-accordion">
+      <div class="recipe-acc-header" id="recipeAccHeader">
+        <h2>Recipes, Ingredients & Allergy Info</h2>
+        <span class="recipe-acc-arrow" id="recipeAccArrow">▼</span>
+      </div>
+      <div class="recipe-acc-body hidden" id="recipeAccBody"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+  import { initializeApp }  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, signOut, onAuthStateChanged }
+                            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, collection, onSnapshot, query, orderBy }
+                            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const CFG={apiKey:"AIzaSyCEAcwTKoSnUkbaGvjrsy1QZ-Duj12WImk",authDomain:"cookingmamauwu-9902c.firebaseapp.com",
+    projectId:"cookingmamauwu-9902c",storageBucket:"cookingmamauwu-9902c.firebasestorage.app",
+    messagingSenderId:"18763902036",appId:"1:18763902036:web:a8703f75e5ddf1d1b791c1"};
+  const OWNER_EMAIL="danielaiscool6128@gmail.com";
+
+  const app=initializeApp(CFG);
+  const auth=getAuth(app);
+  const db=getFirestore(app);
+
+  let orders=[],sessions=[],inventory=[],hourlyRate=parseFloat(localStorage.getItem("mama-wage-rate")||"15");
+  document.getElementById("wageRateInput").value=hourlyRate;
+
+  /* theme */
+  const th=localStorage.getItem("mama-theme")||"dark";
+  document.documentElement.setAttribute("data-theme",th);
+  document.getElementById("themeBtn").textContent=th==="dark"?"☀️":"🌙";
+  document.getElementById("themeBtn").addEventListener("click",()=>{
+    const c=document.documentElement.getAttribute("data-theme");
+    const n=c==="dark"?"light":"dark";
+    document.documentElement.setAttribute("data-theme",n);
+    localStorage.setItem("mama-theme",n);
+    document.getElementById("themeBtn").textContent=n==="dark"?"☀️":"🌙";
+  });
+
+  onAuthStateChanged(auth,user=>{
+    document.getElementById("authLoader").style.display="none";
+    if(!user){window.location.href="signup.html";return;}
+    if(user.email!==OWNER_EMAIL){window.location.href="customer.html";return;}
+    document.getElementById("navAvatar").src=user.photoURL||"";
+    document.getElementById("navName").textContent=user.displayName?.split(" ")[0]||"Owner";
+    document.getElementById("mainNav").style.display="flex";
+    document.getElementById("pageContent").style.display="block";
+
+    document.getElementById("navDdBtn").addEventListener("click",e=>{e.stopPropagation();document.getElementById("navDdMenu").classList.toggle("open");});
+    document.addEventListener("click",()=>document.getElementById("navDdMenu")?.classList.remove("open"));
+
+    listenAll();
+    buildRecipes();
+  });
+
+  document.getElementById("btnSignOut").addEventListener("click",async()=>{await signOut(auth);window.location.href="signup.html";});
+
+  document.getElementById("wageRateSave").addEventListener("click",()=>{
+    hourlyRate=parseFloat(document.getElementById("wageRateInput").value)||15;
+    localStorage.setItem("mama-wage-rate",hourlyRate);
+    recalcAll();
+    showToast(`💰 Rate updated: $${hourlyRate.toFixed(2)}/hr`);
+  });
+
+  function listenAll(){
+    onSnapshot(query(collection(db,"orders"),orderBy("time","desc")),snap=>{orders=snap.docs.map(d=>({id:d.id,...d.data()}));recalcAll();});
+    onSnapshot(query(collection(db,"timeSessions"),orderBy("clockIn","asc")),snap=>{sessions=snap.docs.map(d=>({id:d.id,...d.data()}));recalcAll();});
+    onSnapshot(query(collection(db,"inventory"),orderBy("createdAt","asc")),snap=>{inventory=snap.docs.map(d=>({id:d.id,...d.data()}));recalcAll();});
+  }
+
+  function recalcAll(){
+    const revenue=orders.reduce((s,o)=>s+(o.total||0),0);
+    const empMap={};
+    sessions.filter(s=>s.hoursWorked!=null).forEach(s=>{
+      const k=s.uid||s.email||s.userName;
+      if(!empMap[k])empMap[k]={name:s.userName||"Unknown",role:s.role||"Staff",hrs:0};
+      empMap[k].hrs+=s.hoursWorked||0;
+    });
+    const empList=Object.values(empMap);
+    const wagesTotal=empList.reduce((s,e)=>s+e.hrs*hourlyRate,0);
+    const invCost=inventory.reduce((s,i)=>s+(parseFloat(i.cost)||0),0);
+    const totalExp=wagesTotal+invCost;
+    const netProfit=revenue-totalExp;
+    const margin=revenue>0?((netProfit/revenue)*100).toFixed(1):"0.0";
+    document.getElementById("kpiRevenue").textContent="$"+revenue.toFixed(2);
+    document.getElementById("kpiOrderCount").textContent=orders.length+" orders";
+    document.getElementById("kpiWages").textContent="$"+wagesTotal.toFixed(2);
+    const totalHrs=empList.reduce((s,e)=>s+e.hrs,0);
+    document.getElementById("kpiHoursTotal").textContent=totalHrs.toFixed(2)+" hrs logged";
+    document.getElementById("kpiInvCost").textContent="$"+invCost.toFixed(2);
+    document.getElementById("kpiInvItems").textContent=inventory.length+" items";
+    const profEl=document.getElementById("kpiProfit");
+    profEl.textContent=(netProfit>=0?"+$":"-$")+Math.abs(netProfit).toFixed(2);
+    profEl.className="kpi-val profit "+(netProfit>=0?"positive":"negative");
+    document.getElementById("kpiMargin").textContent="Margin: "+margin+"%";
+    renderOrders();renderWages(empList,wagesTotal);renderInventory();
+  }
+
+  function renderOrders(){
+    const list=document.getElementById("ordersList");
+    document.getElementById("ordBadge").textContent=orders.length+" orders";
+    if(!orders.length){list.innerHTML=`<div class="empty-list">No orders yet 🍽️</div>`;return;}
+    const dc={pending:"dot-pending",cooking:"dot-cooking",ready:"dot-ready",completed:"dot-completed"};
+    list.innerHTML=orders.map(o=>{
+      const ts=o.time?.toDate?o.time.toDate().toLocaleString([],{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}):"—";
+      const ic=(o.items||[]).reduce((s,i)=>s+(i.qty||1),0);
+      return `<div class="order-row">
+        <div><div class="order-cust">👤 ${o.userName||"Guest"}</div><div class="order-items-count">${ic} item${ic!==1?"s":""}</div></div>
+        <div class="order-time-sm">${ts}</div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div class="status-dot ${dc[o.status||"pending"]||"dot-pending"}"></div>
+          <span style="font-size:.72rem;font-weight:800;color:var(--text2)">${o.status||"pending"}</span>
+        </div>
+        <div class="order-amt">$${(o.total||0).toFixed(2)}</div>
+      </div>`;
+    }).join("");
+  }
+
+  function renderWages(empList,wagesTotal){
+    const body=document.getElementById("wagesBody");
+    document.getElementById("empBadge").textContent=empList.length+" employee"+(empList.length!==1?"s":"");
+    if(!empList.length){body.innerHTML=`<tr><td colspan="5" class="empty-list">No time sessions logged yet</td></tr>`;return;}
+    body.innerHTML=empList.map(e=>`<tr>
+      <td>${e.name}</td><td>${e.role}</td>
+      <td class="wage-hrs">${e.hrs.toFixed(2)}</td>
+      <td class="wage-hrs">$${hourlyRate.toFixed(2)}</td>
+      <td class="wage-cost">$${(e.hrs*hourlyRate).toFixed(2)}</td>
+    </tr>`).join("")
+    +`<tr style="background:rgba(255,107,107,0.06)">
+      <td colspan="4" style="font-weight:900;color:var(--text2);font-size:.82rem;letter-spacing:.04em">TOTAL WAGES DUE</td>
+      <td class="wage-cost" style="font-size:1rem">$${wagesTotal.toFixed(2)}</td>
+    </tr>`;
+  }
+
+  function renderInventory(){
+    const list=document.getElementById("invList");
+    document.getElementById("invBadge").textContent=inventory.length+" items";
+    if(!inventory.length){list.innerHTML=`<div class="empty-list">No inventory items</div>`;return;}
+    list.innerHTML=inventory.map(i=>`
+      <div class="inv-row">
+        <div class="inv-name">${i.name}</div>
+        <div class="inv-qty">Qty: ${i.quantity}</div>
+        <div class="inv-cost">$${parseFloat(i.cost||0).toFixed(2)}</div>
+      </div>`).join("");
+  }
+
+  const RECIPES=[
+    {name:"Tacos",desc:"Crispy tortilla shells with seasoned meat, fresh veggies, and zesty toppings.",ingredients:"Ground beef, flour tortillas, lettuce, tomato, cheddar cheese, sour cream, lime, cumin, chili powder",allergens:"Gluten (wheat), dairy, may contain soy"},
+    {name:"Sushi Balls",desc:"Bite-sized temari sushi with premium toppings in a lacquer box.",ingredients:"Sushi rice, rice vinegar, salmon, tamago, nori, sesame seeds, soy sauce",allergens:"Fish, gluten (soy sauce), eggs, sesame"},
+    {name:"Garlic Shrimp",desc:"Shrimp sautéed in garlic butter with lemon, served over rice.",ingredients:"Shrimp, garlic, butter, lemon, parsley, white rice, black pepper",allergens:"Shellfish, dairy"},
+    {name:"Ramen",desc:"Rich tonkotsu broth with noodles, chashu pork, soft egg, narutomaki.",ingredients:"Ramen noodles, pork belly, soft-boiled egg, narutomaki, bamboo shoots, green onion, nori, sesame oil",allergens:"Gluten, eggs, soy, sesame"},
+    {name:"Pizza",desc:"Wood-fired pepperoni pizza with bell pepper, onion, mozzarella.",ingredients:"Pizza dough, tomato sauce, mozzarella, pepperoni, green bell pepper, onion, oregano, olive oil",allergens:"Gluten, dairy, pork"},
+    {name:"Lemonade",desc:"Hand-squeezed lemonade over ice with fresh mint.",ingredients:"Fresh lemons, water, sugar, ice, mint leaves",allergens:"None"},
+    {name:"Kimchi",desc:"Traditional Korean fermented cabbage, tangy and spicy.",ingredients:"Napa cabbage, gochugaru, garlic, ginger, fish sauce, scallions, salt",allergens:"Fish (fish sauce)"},
+    {name:"Guacamole & Chips",desc:"Fresh avocado guacamole with pico de gallo and house-fried tortilla chips.",ingredients:"Avocado, lime, tomato, red onion, cilantro, jalapeño, salt, tortilla chips",allergens:"Corn — gluten-free"},
+    {name:"Donuts",desc:"Classic glazed ring donuts, fried golden.",ingredients:"Flour, sugar, yeast, eggs, butter, milk, vanilla, powdered sugar glaze",allergens:"Gluten, eggs, dairy"},
+    {name:"Curry & Rice",desc:"Japanese-style curry with shrimp, caramelized onion, steamed rice.",ingredients:"Curry roux, shrimp, onion, carrot, potato, white rice, vegetable broth",allergens:"Shellfish, gluten (curry roux), may contain soy"},
+    {name:"Crepes",desc:"Thin French crepes with chocolate, strawberry cream, and kiwi.",ingredients:"Flour, eggs, milk, butter, sugar, vanilla, whipped cream, strawberries, chocolate sauce, kiwi",allergens:"Gluten, eggs, dairy"},
+    {name:"Cookies",desc:"Freshly baked chocolate chip cranberry cookies.",ingredients:"Flour, butter, sugar, brown sugar, eggs, vanilla, baking soda, chocolate chips, dried cranberries",allergens:"Gluten, eggs, dairy, may contain nuts"},
+    {name:"Churrasco Skewers",desc:"Grilled skewers of sausage, steak cubes, and shrimp.",ingredients:"Beef sirloin, chorizo sausage, tiger shrimp, garlic, olive oil, rosemary, salt, black pepper",allergens:"Shellfish, pork"},
+    {name:"Churros",desc:"Crispy sugar-dusted churros with chocolate dipping sauce.",ingredients:"Flour, water, butter, eggs, cinnamon sugar, vegetable oil, chocolate sauce",allergens:"Gluten, eggs, dairy"},
+    {name:"Cheesecake",desc:"New York-style baked cheesecake with graham cracker crust.",ingredients:"Cream cheese, eggs, sugar, vanilla, sour cream, graham crackers, butter",allergens:"Dairy, eggs, gluten"},
+    {name:"Beef Steak",desc:"Seared ribeye steak with fries, cherry tomatoes, broccoli, and BBQ sauce.",ingredients:"Ribeye steak, potatoes, cherry tomatoes, broccoli, butter, garlic, BBQ sauce, black pepper",allergens:"Dairy — gluten-free option available"},
+    {name:"Apple Pie",desc:"Heart-shaped double-crust apple pie with cinnamon filling.",ingredients:"Flour, butter, apples, cinnamon, nutmeg, sugar, egg wash, lemon juice",allergens:"Gluten, eggs, dairy"},
+  ];
+
+  function buildRecipes(){
+    const body=document.getElementById("recipeAccBody");
+    body.innerHTML=RECIPES.map((r,i)=>`
+      <div class="recipe-item">
+        <div class="recipe-item-header" data-ri="${i}">
+          <span class="recipe-item-name">${r.name}</span>
+          <span class="recipe-item-arrow" id="ri-arrow-${i}">▼</span>
+        </div>
+        <div class="recipe-item-body" id="ri-body-${i}">
+          <div class="recipe-row">
+            <div><div class="recipe-label">Description</div><div class="recipe-val">${r.desc}</div></div>
+            <div><div class="recipe-label">Allergens ⚠️</div><div class="recipe-val" style="color:var(--red)">${r.allergens}</div></div>
+          </div>
+          <div class="recipe-label">Ingredients</div>
+          <div class="recipe-val" style="margin-top:4px">${r.ingredients}</div>
+        </div>
+      </div>`).join("");
+    body.querySelectorAll(".recipe-item-header").forEach(h=>{
+      h.addEventListener("click",()=>{
+        const i=h.dataset.ri;
+        document.getElementById(`ri-body-${i}`).classList.toggle("open");
+        document.getElementById(`ri-arrow-${i}`).classList.toggle("open");
+      });
+    });
+  }
+
+  document.getElementById("recipeAccHeader").addEventListener("click",()=>{
+    document.getElementById("recipeAccBody").classList.toggle("hidden");
+    document.getElementById("recipeAccArrow").classList.toggle("open");
+  });
+
+  function showToast(msg){
+    const t=document.getElementById("toast");t.textContent=msg;
+    t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2800);
+  }
+</script>
+</body>
+</html>
+
