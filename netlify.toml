@@ -1,5 +1,7 @@
+[build]
+publish ="."
+
 [[redirects]]
-  from = "/"
-  to = "./signup/signup.html"
-  status = 200
- 
+from "/"
+to = "/signup/signup.html"
+status=302
