@@ -2,6 +2,6 @@
 publish ="."
 
 [[redirects]]
-from "/"
+from = "/"
 to = "/signup/signup.html"
 status=302
