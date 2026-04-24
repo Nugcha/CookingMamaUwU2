@@ -13,7 +13,7 @@ const CFG = {
   appId:"1:18763902036:web:a8703f75e5ddf1d1b791c1"
 };
 const OWNER_EMAIL   = "danielaiscool6128@gmail.com";
-const MANAGER_EMAIL = "mateusstavares2008@gmail.com";
+const MANAGER_EMAIL = "jv101607@gmail.com";
 const LOW = 10;
 
 const NAV_LINKS = {
