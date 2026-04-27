@@ -15,7 +15,7 @@ const CFG = {
 };
 
 const ROLES = {
-  "danielaiscool6128@gmail.com":  "Owner",
+  "azaharulislam171@gmail.com":  "Owner",
   "mateusstavares2008@gmail.com": "Manager",
   "thehecklolwhat15@gmail.com":   "Chef",
   "jv101607@gmail.com":           "Waiter",

@@ -5,7 +5,7 @@ import { getFirestore, doc, setDoc, getDoc, serverTimestamp }
                            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* ── Role / email map ── */
-const OWNER_EMAIL   = "danielaiscool6128@gmail.com";
+const OWNER_EMAIL   = "azaharulislam171@gmail.com";
 const MANAGER_EMAIL = "mateusstavares2008@gmail.com";
 
 const FIREBASE_CONFIG = {
